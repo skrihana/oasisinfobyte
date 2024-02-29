@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Authentication</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .login-container, .success-container, .register-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        .success-container, .register-container {
+            display: none;
+            text-align: center;
+            color: #acaf4c;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #555555;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Media Queries for Responsive Design */
+        @media (max-width: 600px) {
+            .login-container, .success-container, .register-container {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="register-container">
+    <h2>Register</h2>
+    <form id="registerForm">
+        <label for="registerUsername">Username:</label>
+        <input type="text" id="registerUsername" name="registerUsername" required>
+
+        <label for="registerPassword">Password:</label>
+        <input type="password" id="registerPassword" name="registerPassword" required>
+
+        <button type="button" onclick="register()">Register</button>
+    </form>
+</div>
+
+<div class="login-container" id="loginContainer">
+    <h2>Login</h2>
+    <form id="loginForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="button" onclick="authenticate()">Login</button>
+    </form>
+</div>
+
+<div class="success-container" id="successMessage">
+    <p>Registration successful! You can now log in.</p>
+</div>
+
+<script>
+    function register() {
+        var registerUsername = document.getElementById('registerUsername').value;
+        var registerPassword = document.getElementById('registerPassword').value;
+
+        // In a real-world scenario, send these registration details to the server
+        // For simplicity, I'm just displaying an alert here
+        alert('Registration successful!');
+
+        // Show the login form after successful registration
+        document.getElementById('registerContainer').style.display = 'none';
+        document.getElementById('loginContainer').style.display = 'block';
+    }
+
+    function authenticate() {
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
+
+        // In a real-world scenario, send these credentials to the server for authentication
+        // For simplicity, I'm using a simple check here
+        if (username === 'demo' && password === 'password') {
+            // Show success message
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+        } else {
+            alert('Invalid credentials. Please try again.');
+        }
+    }
+</script>
+
+</body>
+</html>
+

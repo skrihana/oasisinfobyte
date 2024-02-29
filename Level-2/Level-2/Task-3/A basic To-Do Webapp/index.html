@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo App</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        label, input, button {
+            margin: 10px;
+        }
+
+        input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: calc(100% - 20px);
+        }
+
+        button {
+            padding: 8px 12px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        li:hover {
+            background-color: #f9f9f9;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .edit-btn, .delete-btn {
+            padding: 8px 12px;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+        .edit-btn {
+            background-color: #f3212c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .edit-btn:hover {
+            background-color: #f0831e;
+        }
+
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>ToDo App</h1>
+
+    <label for="taskInput">New Task:</label>
+    <input type="text" id="taskInput">
+    <button onclick="addTask()">Add Task</button>
+
+    <h2>Pending Tasks</h2>
+    <ul id="pendingTasks">
+        <!-- Pending tasks will be displayed here -->
+    </ul>
+
+    <h2>Completed Tasks</h2>
+    <ul id="completedTasks">
+        <!-- Completed tasks will be displayed here -->
+    </ul>
+</div>
+
+<script>
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    function addTask() {
+        const taskInput = document.getElementById('taskInput');
+        const taskText = taskInput.value.trim();
+
+        if (taskText !== '') {
+            const task = {
+                text: taskText,
+                completed: false,
+                timestamp: new Date().toLocaleString()
+            };
+
+            tasks.push(task);
+            updateTasks();
+            taskInput.value = '';
+
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+    }
+
+    function updateTasks() {
+        const pendingTasksList = document.getElementById('pendingTasks');
+        const completedTasksList = document.getElementById('completedTasks');
+
+        pendingTasksList.innerHTML = '';
+        completedTasksList.innerHTML = '';
+
+        tasks.forEach((task, index) => {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `
+                <span class="${task.completed ? 'completed' : ''}">${task.text} (Added: ${task.timestamp})</span>
+                <button class="edit-btn" onclick="toggleTask(${index})">${task.completed ? 'Undo' : 'Complete'}</button>
+                <button class="edit-btn" onclick="editTask(${index})">Edit</button>
+                <button class="delete-btn" onclick="deleteTask(${index})">Delete</button>
+            `;
+
+            if (task.completed) {
+                completedTasksList.appendChild(listItem);
+            } else {
+                pendingTasksList.appendChild(listItem);
+            }
+        });
+    }
+
+    function toggleTask(index) {
+        tasks[index].completed = !tasks[index].completed;
+        updateTasks();
+
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function editTask(index) {
+        const newTaskText = prompt('Edit task:', tasks[index].text);
+        if (newTaskText !== null) {
+            tasks[index].text = newTaskText.trim();
+            updateTasks();
+
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+    }
+
+    function deleteTask(index) {
+        tasks.splice(index, 1);
+        updateTasks();
+
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    updateTasks();
+</script>
+
+</body>
+</html>
